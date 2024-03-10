@@ -31,7 +31,7 @@ $VMCTool         = "$TempDir\ps2vmc-tool.exe"
 $BlankVMCZip     = "$TempDir\BlankVMC.zip"
 $BoxArtDatabase  = "https://raw.githubusercontent.com/xlenore/ps2-covers/main/covers/default/"
 $ScriptRepo      = "https://raw.githubusercontent.com/MegaBitmap/PS2-VMC-GUI/master"
-$SetupFilesURI   = "$ScriptRepo/Setupfiles.zip"
+$SetupFilesURI   = "$ScriptRepo/SetupFiles.zip"
 $LicenseURI      = "$ScriptRepo/LICENSE.txt"
 
 $DefaultDir = New-Object $LabelObject
