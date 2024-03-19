@@ -341,7 +341,7 @@ $CheckBoxArt = New-Object $CheckBoxObject
 $CheckBoxArt.AutoSize = $true
 $CheckBoxArt.Checked = $true
 # $CheckBoxArt.Checked = $false
-$CheckBoxArt.Text = "Enable Box Art"
+$CheckBoxArt.Text = "Display Box Art"
 $CheckBoxArt.Location = New-Object System.Drawing.Point( 560 , 26 )
 $CheckBoxArt.Add_Click( {
     if ( -not $CheckBoxArt.Checked ) {
@@ -500,11 +500,12 @@ $VMCListView.Columns[3].TextAlign = "Right"
 $VMCListView.Columns[3].Width = 100
 $VMCListView.Add_Click( {
     if ( $CheckBoxArt.Checked ) {
-        $RawNameMask = $VMCListView.SelectedItems.Text -replace '"............'
-        $TrimName = $VMCListView.SelectedItems.Text -replace "$RawNameMask|`".."
+        $Serial = $VMCListView.SelectedItems.Text -replace '"..'
+        $SerialMask = $Serial -replace '..........'
+        $Serial = $Serial -replace "$SerialMask"
         Find-Error
         $ErrorActionPreference = "SilentlyContinue"
-        $BoxArt = Invoke-WebRequest -Uri "$( $BoxArtDatabase )$TrimName.jpg"
+        $BoxArt = Invoke-WebRequest -Uri "$( $BoxArtDatabase )$Serial.jpg"
         $ErrorActionPreference = "Continue"
         if ( -not $Error ) {
             $ArtPictureBox.Size = New-Object System.Drawing.Point( 452 , 648 )
