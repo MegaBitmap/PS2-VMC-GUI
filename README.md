@@ -7,7 +7,7 @@ Tested working on windows 10 and 11.
 
 
 This is a PC tool used to manage PS2 virtual memory cards.  
-PS2-VMC-GUI if used to manage saves on a `.bin` virtual memory card file for use with [OPL](https://github.com/ps2homebrew/Open-PS2-Loader) or [neutrino](https://github.com/rickgaiser/neutrino).  
+PS2-VMC-GUI is used to manage saves on a `.bin` virtual memory card file for use with [OPL](https://github.com/ps2homebrew/Open-PS2-Loader) or [neutrino](https://github.com/rickgaiser/neutrino).  
 It funcions similarly to [mymc-gui](http://www.csclub.uwaterloo.ca:11068/mymc/).  
 Mymc is used to manage saves on a `.ps2` memory card file for use with [PCSX2](https://pcsx2.net/).  
 
