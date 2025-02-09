@@ -24,18 +24,18 @@ $JIS   = [System.Text.Encoding]::GetEncoding("Shift-JIS")
 $W1252 = [System.Text.Encoding]::GetEncoding("Windows-1252")
 
 $ScriptPath      = Get-Location
-$TempDir         = "$env:TEMP\ps2-vmc-gui"
-$SetupFilesZip   = "$ScriptPath\Setupfiles.zip"
-$License         = "$ScriptPath\LICENSE.txt"
-$VMCTool         = "$TempDir\ps2vmc-tool.exe"
-$BlankVMCZip     = "$TempDir\BlankVMC.zip"
+$TempDir         = "$env:TEMP/ps2-vmc-gui"
+$SetupFilesZip   = "$ScriptPath/Setupfiles.zip"
+$License         = "$ScriptPath/LICENSE.txt"
+$VMCTool         = "$TempDir/ps2vmc-tool.exe"
+$BlankVMCZip     = "$TempDir/BlankVMC.zip"
 $BoxArtDatabase  = "https://raw.githubusercontent.com/xlenore/ps2-covers/main/covers/default/"
 # $ScriptRepo      = "https://raw.githubusercontent.com/MegaBitmap/PS2-VMC-GUI/master"
 # $SetupFilesURI   = "$ScriptRepo/SetupFiles.zip"
 # $LicenseURI      = "$ScriptRepo/LICENSE.txt"
 
 $DefaultDir = New-Object $LabelObject
-$DefaultDir.Text = "$env:USERPROFILE\Desktop"
+$DefaultDir.Text = "$env:USERPROFILE/Desktop"
 
 $WelcomeMessage = "Please Click Open File and select a VMC file."
 $UnreadableMessage = "no PS2 Memory Card detected"
@@ -202,7 +202,7 @@ function Get-VMCList {
             }
             if ( $SaveDirTable -match "icon.sys" ) {
 
-                $ExtractIconInfo = & $VMCTool $VMCFile --extract-file $FolderName/icon.sys $TempDir\icon.sys
+                $ExtractIconInfo = & $VMCTool $VMCFile --extract-file $FolderName/icon.sys $TempDir/icon.sys
 
                 if ( $ExtractIconInfo -match "Error" ) {
 
@@ -220,7 +220,7 @@ function Get-VMCList {
                             Write-Host $Line
                         }
                     }
-                    $FriendlyName = Get-SaveName $TempDir\icon.sys
+                    $FriendlyName = Get-SaveName $TempDir/icon.sys
                 }
             }
             else {
@@ -240,6 +240,81 @@ function Get-VMCList {
             $VMCListView.Items.Add( $NewItem )
         }
     }
+}
+function Get-VMCScanList {
+    param (
+        $VMCFile
+    )
+    $VMCReturnInfo = ""
+
+    $RootDirTable = & $VMCTool $VMCFile --list /
+    foreach ($RootDirLine in $RootDirTable) {
+
+        if ( $RootDirLine -notmatch 'PS2VMC-TOOL v|----------|"."|".."' ) {
+            
+            $SaveInfo = $RootDirLine -split " / "
+
+            $FolderName = $SaveInfo[0]
+            $Type = $SaveInfo[1]
+            $Size = $SaveInfo[2]
+            $Time = $SaveInfo[4]
+
+            if ( $Type -match "<file>" ) {
+                Write-Host "ERROR: You must manually delete all files from root as this GUI does not support them"
+                return
+            }
+            $AllSize = [int]$Size
+
+            $SaveDirTable = & $VMCTool $VMCFile --list $FolderName
+
+            foreach ( $SaveDirLine in $SaveDirTable ) {
+
+                if ( $SaveDirLine -notmatch 'PS2VMC-TOOL v|----------|"."|".."' ) {
+
+                    $SaveFileInfo = $SaveDirLine -split " / "
+
+                    $SaveFileType = $SaveFileInfo[1]
+                    $SaveFileSize = $SaveFileInfo[2]
+
+                    if ( $SaveFileType -match "<dir>" ) {
+                        Write-Host "ERROR: You must manually delete all subfolders as this GUI does not support them"
+                        return
+                    }
+                    $AllSize += [int]$SaveFileSize
+                }
+            }
+            if ( $SaveDirTable -match "icon.sys" ) {
+
+                $ExtractIconInfo = & $VMCTool $VMCFile --extract-file $FolderName/icon.sys $TempDir/icon.sys
+
+                if ( $ExtractIconInfo -match "Error" ) {
+
+                    $FormExtract = $null
+                    foreach ( $Line in $ExtractIconInfo ) {
+                        $FormExtract += "$Line`r`n"
+                    }
+                    Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error exporting icon.sys`r`n`r`n$FormExtract`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                    $FriendlyName = $null
+                }
+                else {
+                    foreach ( $Line in $ExtractIconInfo ) {
+
+                        if ( $Line -notmatch "PS2VMC-TOOL v" ) {
+                            Write-Host $Line
+                        }
+                    }
+                    $FriendlyName = Get-SaveName $TempDir/icon.sys
+                }
+            }
+            else {
+                $FriendlyName = $null
+            }
+            $RoundedSize = [string][math]::truncate( $AllSize / 1024 )+"KB"
+            
+            $VMCReturnInfo += "$FolderName    `"$([string]$FriendlyName)`"    $RoundedSize    $Time`r`n"
+        }
+    }
+    return $VMCReturnInfo
 }
 function Get-VMC {
     param (
@@ -318,7 +393,7 @@ $ButtonCreateVMC.Add_Click( {
     if ( $NewVMC ) {
         Expand-Archive -Path $BlankVMCZip -DestinationPath $TempDir -Force
 
-        Move-Item -Path "$TempDir\BlankVMC.bin" -Destination $NewVMC -Force
+        Move-Item -Path "$TempDir/BlankVMC.bin" -Destination $NewVMC -Force
         
         if ( -not ( Find-Error ) ) {
 
@@ -337,12 +412,32 @@ $ButtonCreateVMC.Add_Click( {
 } )
 $MainForm.Controls.Add( $ButtonCreateVMC )
 
+$ButtonScanVMCFolder = New-Object $ButtonObject
+$ButtonScanVMCFolder.Text = "Scan Folder"
+$ButtonScanVMCFolder.AutoSize = $true
+$ButtonScanVMCFolder.Location = New-Object System.Drawing.Point( 480 , 20 )
+$ButtonScanVMCFolder.Add_Click( {
+    $FolderScanVMC = Set-Folder
+    $AllVMC = Get-ChildItem -Path $FolderScanVMC -Filter "*.bin"
+    $TempListVMC = "List of all saves found in $FolderScanVMC\ as of $(Get-Date -Format "yyyy\/MM\/dd/hh:mm:ss")`r`n"
+    foreach ( $TempVMC in $AllVMC ) {
+        $TempListVMCRaw = Get-VMCScanList "$FolderScanVMC/$TempVMC"
+
+        if ( $TempListVMCRaw -ne "" -and $TempListVMCRaw -ne $null ) {
+            
+            $TempListVMC += "$TempVMC`r`n$TempListVMCRaw`r`n"
+        }
+    }
+    Write-Form $TempListVMC "List of all saves found in $FolderScanVMC\"
+} )
+$MainForm.Controls.Add( $ButtonScanVMCFolder )
+
 $CheckBoxArt = New-Object $CheckBoxObject
 $CheckBoxArt.AutoSize = $true
 # $CheckBoxArt.Checked = $true
 $CheckBoxArt.Checked = $false
 $CheckBoxArt.Text = "Display Box Art"
-$CheckBoxArt.Location = New-Object System.Drawing.Point( 560 , 26 )
+$CheckBoxArt.Location = New-Object System.Drawing.Point( 620 , 26 )
 $CheckBoxArt.Add_Click( {
     if ( -not $CheckBoxArt.Checked ) {
         $ArtPictureBox.Image = $null
@@ -659,7 +754,7 @@ $ButtonExportAll.Add_Click( {
                     foreach ( $Save in $VMCListView.Items ) {
 
                         $SelectedSave = $Save.Text
-                        $ExportTarget = "$ExportFolder\$($SelectedSave -replace '"').psu"
+                        $ExportTarget = "$ExportFolder/$($SelectedSave -replace '"').psu"
 
                         $ExportInfo = & $VMCTool $LabelVMC.Text --psu-export $SelectedSave $ExportTarget
                         if ( $ExportInfo -match "Error" ) {
@@ -718,7 +813,7 @@ if ( -not ( Test-Path $TempDir ) ) {
     New-Item $TempDir -ItemType "directory" | Out-Null
 }
 if ( ( -not ( Test-Path $VMCTool ) ) -or ( -not ( Test-Path $BlankVMCZip ) ) ) {
-    # $SetupFilesZip = "$TempDir\SetupFiles.zip"
+    # $SetupFilesZip = "$TempDir/SetupFiles.zip"
     # Invoke-WebRequest -Uri $SetupFilesURI -OutFile $SetupFilesZip
     # Expand-Archive $SetupFilesZip -DestinationPath $TempDir
     if ( Test-Path $SetupFilesZip ) {
