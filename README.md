@@ -7,25 +7,22 @@ Tested working on windows 10 and 11.
 
 
 This is a PC tool used to manage PS2 virtual memory cards.  
+Supports `.psu` and/or `.PSV` to `.bin` VMC file importing.  
+Supports `.bin` VMC to `.psu` file exporting.  
 PS2-VMC-GUI is used to manage saves on a `.bin` virtual memory card file for use with [OPL](https://github.com/ps2homebrew/Open-PS2-Loader) or [neutrino](https://github.com/rickgaiser/neutrino).  
-It funcions similarly to [mymc-gui](http://www.csclub.uwaterloo.ca:11068/mymc/).  
+It functions similarly to [mymc-gui](http://www.csclub.uwaterloo.ca:11068/mymc/).  
 Mymc is used to manage saves on a `.ps2` memory card file for use with [PCSX2](https://pcsx2.net/).  
 
 
 ## How do I use it?
 
 ### Caution! Importing two saves from the same game will OVERWRITE the previous save.
-If you import two different saves for the same game,  
-they will be merged and overwrite eachother without waring.  
+- If you import two different saves for the same game,  
+they will be merged and overwritten without waring.  
 
-- Run this command or create a shortcut and paste this command as the target.
-
-```
-powershell "irm https://raw.githubusercontent.com/MegaBitmap/PS2-VMC-GUI/master/PS2-VMC-GUI.ps1 | iex"
-```
-
-For offline use, download this repository as a ZIP file.  
-Extract the ZIP to a folder and then run `PS2-VMC-GUI-Offline.ps1` with PowerShell.  
+Clone this repository or download it as a ZIP file then extract all files to a folder.  
+In the extracted folder run `PS2-VMC-GUI-Offline.ps1` with PowerShell.  
+The software license will show, click OK then the main interface will appear.  
 
 ## Credits:
 

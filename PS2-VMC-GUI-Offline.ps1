@@ -25,14 +25,11 @@ $W1252 = [System.Text.Encoding]::GetEncoding("Windows-1252")
 
 $ScriptPath      = Get-Location
 $TempDir         = "$env:TEMP/ps2-vmc-gui"
-$SetupFilesZip   = "$ScriptPath/Setupfiles.zip"
+$SetupFilesZip   = "$ScriptPath/SetupFiles.zip"
 $License         = "$ScriptPath/LICENSE.txt"
 $VMCTool         = "$TempDir/ps2vmc-tool.exe"
 $BlankVMCZip     = "$TempDir/BlankVMC.zip"
 $BoxArtDatabase  = "https://raw.githubusercontent.com/xlenore/ps2-covers/main/covers/default/"
-# $ScriptRepo      = "https://raw.githubusercontent.com/MegaBitmap/PS2-VMC-GUI/master"
-# $SetupFilesURI   = "$ScriptRepo/SetupFiles.zip"
-# $LicenseURI      = "$ScriptRepo/LICENSE.txt"
 
 $DefaultDir = New-Object $LabelObject
 $DefaultDir.Text = "$env:USERPROFILE/Desktop"
@@ -57,7 +54,7 @@ function Get-SaveName {
 }
 function Find-Error {
     if ( $Error ) {
-        Write-Form "`r`nAn error has occured:`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+        Write-Form "`r`nAn error has occurred:`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
         return $true
     }
 }
@@ -210,7 +207,7 @@ function Get-VMCList {
                     foreach ( $Line in $ExtractIconInfo ) {
                         $FormExtract += "$Line`r`n"
                     }
-                    Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error exporting icon.sys`r`n`r`n$FormExtract`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                    Write-Form "`r`nAn error has occurred:`r`n`r`nThere was an error exporting icon.sys`r`n`r`n$FormExtract`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                     $FriendlyName = $null
                 }
                 else {
@@ -293,7 +290,7 @@ function Get-VMCScanList {
                     foreach ( $Line in $ExtractIconInfo ) {
                         $FormExtract += "$Line`r`n"
                     }
-                    Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error exporting icon.sys`r`n`r`n$FormExtract`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                    Write-Form "`r`nAn error has occurred:`r`n`r`nThere was an error exporting icon.sys`r`n`r`n$FormExtract`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                     $FriendlyName = $null
                 }
                 else {
@@ -357,7 +354,7 @@ function Get-VMC {
             }
         }
         else {
-            Write-Form "`r`nAn error has occured:`r`n`r`nThe Selected VMC File is either too big, too small, or not 4MB or 8MB (8388608 byte) aligned.`r`nThe VMC File Size is $( $VMCFileSize / 1024 / 1024 ) MB.`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+            Write-Form "`r`nAn error has occurred:`r`n`r`nThe Selected VMC File is either too big, too small, or not 4MB or 8MB (8388608 byte) aligned.`r`nThe VMC File Size is $( $VMCFileSize / 1024 / 1024 ) MB.`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
         }
     }
 }
@@ -434,7 +431,6 @@ $MainForm.Controls.Add( $ButtonScanVMCFolder )
 
 $CheckBoxArt = New-Object $CheckBoxObject
 $CheckBoxArt.AutoSize = $true
-# $CheckBoxArt.Checked = $true
 $CheckBoxArt.Checked = $false
 $CheckBoxArt.Text = "Display Box Art"
 $CheckBoxArt.Location = New-Object System.Drawing.Point( 620 , 26 )
@@ -516,7 +512,7 @@ $ButtonImport.Add_Click( {
                     foreach ($Line in $ImportInfo) {
                         $FormImportInfo += "$Line`r`n"
                     }
-                    Write-Form "`r`nAn error has occured:`r`n`r`nThere may not be enough available space on VMC.`r`n`r`n$FormImportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                    Write-Form "`r`nAn error has occurred:`r`n`r`nThere may not be enough available space on VMC.`r`n`r`n$FormImportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                 }
                 else {
                     foreach ( $Line in $ImportInfo ) {
@@ -528,7 +524,7 @@ $ButtonImport.Add_Click( {
                 Get-VMC $LabelVMC.Text
             }
             else {
-                Write-Form "`r`nAn error has occured:`r`n`r`nThe Selected LaunchELF .psu file is too large.`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                Write-Form "`r`nAn error has occurred:`r`n`r`nThe Selected LaunchELF .psu file is too large.`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
             }
         }
     }
@@ -556,7 +552,7 @@ $ButtonImportPSV.Add_Click( {
                     foreach ($Line in $ImportInfo) {
                         $FormImportInfo += "$Line`r`n"
                     }
-                    Write-Form "`r`nAn error has occured:`r`n`r`nThere may not be enough available space on VMC.`r`n`r`n$FormImportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                    Write-Form "`r`nAn error has occurred:`r`n`r`nThere may not be enough available space on VMC.`r`n`r`n$FormImportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                 }
                 else {
                     foreach ( $Line in $ImportInfo ) {
@@ -568,7 +564,7 @@ $ButtonImportPSV.Add_Click( {
                 Get-VMC $LabelVMC.Text
             }
             else {
-                Write-Form "`r`nAn error has occured:`r`n`r`nThe Selected save file .PSV file is too large.`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                Write-Form "`r`nAn error has occurred:`r`n`r`nThe Selected save file .PSV file is too large.`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
             }
         }
     }
@@ -659,7 +655,7 @@ $ButtonFormat.Add_Click( {
                                 foreach ($Line in $DeleteInfo) {
                                     $FormDeleteInfo += "$Line`r`n"
                                 }
-                                Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error deleting $SelectedSave.`r`n`r`n$FormDeleteInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                                Write-Form "`r`nAn error has occurred:`r`n`r`nThere was an error deleting $SelectedSave.`r`n`r`n$FormDeleteInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                             }
                             else {
                                 foreach ( $Line in $DeleteInfo ) {
@@ -677,7 +673,7 @@ $ButtonFormat.Add_Click( {
                         foreach ($Line in $DeleteDirInfo) {
                             $FormDeleteDirInfo += "$Line`r`n"
                         }
-                        Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error deleting $($VMCListBox.SelectedItem).`r`n`r`n$FormDeleteDirInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                        Write-Form "`r`nAn error has occurred:`r`n`r`nThere was an error deleting $($VMCListBox.SelectedItem).`r`n`r`n$FormDeleteDirInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                     }
                     else {
                         foreach ( $Line in $DeleteDirInfo ) {
@@ -720,7 +716,7 @@ $ButtonExport.Add_Click( {
                         foreach ( $Line in $ExportInfo ) {
                             $FormExportInfo += "$Line`r`n"
                         }
-                        Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error exporting $SelectedSave.`r`n`r`n$FormExportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                        Write-Form "`r`nAn error has occurred:`r`n`r`nThere was an error exporting $SelectedSave.`r`n`r`n$FormExportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                     }
                     else {
                         $DefaultDir.Text = ( Get-Item $ExportTarget ).Directory
@@ -763,7 +759,7 @@ $ButtonExportAll.Add_Click( {
                             foreach ($Line in $ExportInfo) {
                                 $FormExportInfo += "$Line`r`n"
                             }
-                            Write-Form "`r`nAn error has occured:`r`n`r`nThere was an error exporting $SelectedSave.`r`n`r`n$FormExportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
+                            Write-Form "`r`nAn error has occurred:`r`n`r`nThere was an error exporting $SelectedSave.`r`n`r`n$FormExportInfo`r`n`r`n$( $Error -join "`r`n`r`n" )" "Error"
                         }
                         else {
                             foreach ( $Line in $ExportInfo ) {
@@ -800,8 +796,9 @@ if ( -not ( Test-Path $License ) ) {
     Write-Form "Error: License file not detected" "Error" | Out-Null
     exit
 }
+
+# First window starts here
 $LicenseResult = Write-Form ( Get-Content $License -Raw ) "Please Read the Software License"
-# $LicenseResult = Write-Form ( Invoke-WebRequest -Uri $LicenseURI ).Content "Please Read the Software License"
 Find-Error
 if ( $Error ) {
     exit
@@ -812,17 +809,12 @@ if ( $LicenseResult -match "Cancel" ) {
 if ( -not ( Test-Path $TempDir ) ) {
     New-Item $TempDir -ItemType "directory" | Out-Null
 }
-if ( ( -not ( Test-Path $VMCTool ) ) -or ( -not ( Test-Path $BlankVMCZip ) ) ) {
-    # $SetupFilesZip = "$TempDir/SetupFiles.zip"
-    # Invoke-WebRequest -Uri $SetupFilesURI -OutFile $SetupFilesZip
-    # Expand-Archive $SetupFilesZip -DestinationPath $TempDir
-    if ( Test-Path $SetupFilesZip ) {
-        Expand-Archive $SetupFilesZip -DestinationPath $TempDir
-    }
-    else {
-        Write-Form "Error: SetupFiles zip file not detected" "Error" | Out-Null
-        exit
-    }
+if ( Test-Path $SetupFilesZip ) {
+    Expand-Archive $SetupFilesZip -DestinationPath $TempDir -Force
+}
+else {
+    Write-Form "Error: SetupFiles zip file not detected" "Error" | Out-Null
+    exit
 }
 Find-Error
 
