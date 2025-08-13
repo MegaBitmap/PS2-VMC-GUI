@@ -415,6 +415,9 @@ $ButtonScanVMCFolder.AutoSize = $true
 $ButtonScanVMCFolder.Location = New-Object System.Drawing.Point( 480 , 20 )
 $ButtonScanVMCFolder.Add_Click( {
     $FolderScanVMC = Set-Folder
+    if ( $FolderScanVMC -eq "" -or $FolderScanVMC -eq $null ) {
+        return
+    }
     $AllVMC = Get-ChildItem -Path $FolderScanVMC -Filter "*.bin"
     $TempListVMC = "List of all saves found in $FolderScanVMC\ as of $(Get-Date -Format "yyyy\/MM\/dd/hh:mm:ss")`r`n"
     foreach ( $TempVMC in $AllVMC ) {
